@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1f14" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Evy — Natural y Cercana</title>
+  <style>
+    :root {
+      --bg: #070f0b;
+      --bg2: #0c1a12;
+      --card: #12241a;
+      --card2: #183026;
+      --green: #2ecc71;
+      --green2: #27ae60;
+      --green-soft: #3dd68c;
+      --green-dim: #1a6b3c;
+      --text: #e8f5e9;
+      --text-dim: #8fbf9a;
+      --border: #1e3d2a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .header-logo {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #2ecc71, #0d3b22);
+      border: 1.5px solid var(--green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 0 10px rgba(46,204,113,0.3);
+    }
+    .header-info h1 {
+      font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+    }
+    .header-info p {
+      font-size: 10px; color: var(--green-soft); letter-spacing: 0.3px;
+    }
+    .online-badge {
+      margin-left: auto;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12px; color: var(--green);
+    }
+    .online-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+    }
+
+    /* PAGES */
+    .page {
+      display: none;
+      flex: 1;
+      overflow-y: auto;
+      flex-direction: column;
+    }
+    .page.active { display: flex; }
+
+    /* HOME */
+    .home-content {
+      padding: 24px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+    .home-logo {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #1a6b3c, #0a1f14);
+      border: 2px solid var(--green-dim);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px;
+      box-shadow: 0 0 30px rgba(46,204,113,0.15);
+      position: relative;
+    }
+    .home-logo::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(46,204,113,0.25);
+      border-top-color: var(--green);
+      animation: spin 8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .home-title { text-align: center; }
+    .home-title h2 { font-size: 26px; font-weight: 700; letter-spacing: 1px; }
+    .home-title p { font-size: 13px; color: var(--green-soft); margin-top: 4px; }
+
+    .greeting { text-align: center; font-size: 18px; margin-top: 4px; }
+    .greeting span { color: var(--green-soft); font-weight: 600; }
+    .greeting-sub {
+      font-size: 13px; color: var(--text-dim); text-align: center; margin-top: -8px;
+    }
+
+    .quick-input {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .quick-input input {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 13px 16px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+    .quick-input input:focus { border-color: var(--green); }
+    .quick-input button {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--green);
+      border: none;
+      color: #0a1f14;
+      font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .stat-card {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .stat-card .icon { font-size: 22px; margin-bottom: 4px; }
+    .stat-card .num { font-size: 18px; font-weight: 700; color: var(--green-soft); }
+    .stat-card .label { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+    .section-title {
+      width: 100%;
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 8px 0 6px;
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+    }
+    .quick-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: var(--text);
+      font-size: 13px;
+    }
+    .quick-btn:active { background: var(--card2); }
+    .quick-btn .qicon { font-size: 24px; }
+
+    .core-card {
+      width: 100%;
+      background: linear-gradient(135deg, #12241a, #0f2a1c);
+      border: 1px solid var(--green-dim);
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .core-card .core-icon {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--card2);
+      border: 1.5px solid var(--green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .core-info { flex: 1; }
+    .core-info h4 { font-size: 13px; color: var(--green-soft); }
+    .core-info p { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+    .core-level {
+      font-size: 12px; font-weight: 600; color: var(--green);
+      text-align: right;
+    }
+
+    /* CHAT */
+    #chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .msg {
+      max-width: 85%;
+      padding: 11px 14px;
+      border-radius: 16px;
+      font-size: 14.5px;
+      line-height: 1.45;
+      word-wrap: break-word;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .msg.user {
+      align-self: flex-end;
+      background: var(--green2);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    .msg.evy {
+      align-self: flex-start;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+    .msg.system {
+      align-self: center;
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 12.5px;
+      text-align: center;
+      max-width: 95%;
+    }
+    .msg-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .msg-actions button {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px 8px;
+      font-size: 11px;
+      color: var(--text-dim);
+      cursor: pointer;
+    }
+    .msg-actions button:active { background: var(--card2); }
+
+    .chat-input-area {
+      padding: 10px 14px 14px;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+    #chat-input {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-size: 14.5px;
+      resize: none;
+      max-height: 110px;
+      outline: none;
+      font-family: inherit;
+    }
+    #chat-input:focus { border-color: var(--green); }
+    #send-btn {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      background: var(--green);
+      border: none;
+      color: #0a1f14;
+      font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    #send-btn:disabled { background: var(--green-dim); color: #5a8a6a; }
+
+    .typing { display: flex; gap: 4px; padding: 4px 0; }
+    .typing span {
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.15s; }
+    .typing span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    /* IDEAS */
+    .ideas-header { padding: 20px 18px 10px; }
+    .ideas-header h2 { font-size: 22px; }
+    .ideas-header h2 span { color: var(--green-soft); }
+    .ideas-header p { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+
+    .idea-input-row {
+      display: flex;
+      gap: 10px;
+      padding: 0 18px 16px;
+    }
+    .idea-input-row input {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+    .idea-input-row button {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      background: var(--green);
+      border: none;
+      color: #0a1f14;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #ideas-list {
+      padding: 0 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .idea-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      position: relative;
+    }
+    .idea-card p { font-size: 14px; line-height: 1.4; padding-right: 20px; }
+    .idea-card .idea-date {
+      font-size: 11px; color: var(--text-dim); margin-top: 8px;
+    }
+    .idea-card .delete-idea {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: none; border: none;
+      color: var(--text-dim); font-size: 14px;
+      cursor: pointer;
+    }
+    .empty-ideas {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-dim);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* PERFIL */
+    .perfil-content {
+      padding: 24px 18px 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .perfil-logo {
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #1a6b3c, #0a1f14);
+      border: 2px solid var(--green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px;
+      box-shadow: 0 0 20px rgba(46,204,113,0.2);
+    }
+    .perfil-name { text-align: center; }
+    .perfil-name h2 { font-size: 24px; letter-spacing: 1px; }
+    .perfil-name p { font-size: 13px; color: var(--green-soft); margin-top: 3px; }
+
+    .personality-box {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .personality-box h3 {
+      font-size: 14px; color: var(--green-soft); margin-bottom: 10px;
+    }
+    .personality-box .trait {
+      font-size: 13px; margin-bottom: 6px;
+    }
+    .personality-box .trait strong { color: var(--text); }
+    .personality-box .desc {
+      font-size: 12.5px; color: var(--text-dim); margin-top: 10px; line-height: 1.4;
+    }
+
+    .info-row {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .info-row .label { color: var(--text-dim); }
+    .info-row .value { color: var(--green-soft); font-weight: 500; }
+
+    .form-section {
+      width: 100%;
+      margin-top: 8px;
+    }
+    .form-section label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .form-section input, .form-section select {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    .form-section input:focus, .form-section select:focus {
+      border-color: var(--green);
+    }
+    .form-section .hint {
+      font-size: 12px; color: var(--text-dim); line-height: 1.4; margin-bottom: 10px;
+    }
+    .btn-save {
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      border: 1.5px solid var(--green);
+      background: transparent;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+    }
+    .btn-save:active { background: rgba(46,204,113,0.1); }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      display: flex;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 6px 0 8px;
+      flex-shrink: 0;
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 6px 0;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .nav-item .nav-icon { font-size: 20px; }
+    .nav-item.active { color: var(--green); }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-logo">🍃</div>
+    <div class="header-info">
+      <h1>EVY</h1>
+      <p>NATURAL Y CERCANA</p>
+    </div>
+    <div class="online-badge">
+      <div class="online-dot"></div>
+      Online
+    </div>
+  </div>
+
+  <!-- PÁGINA INICIO -->
+  <div id="page-home" class="page active">
+    <div class="home-content">
+      <div class="home-logo">🍃</div>
+      <div class="home-title">
+        <h2>EVY</h2>
+        <p>Natural y cercana</p>
+      </div>
+
+      <div class="greeting" id="greeting">Hola</div>
+      <div class="greeting-sub">¿En qué te puedo acompañar hoy?</div>
+
+      <div class="quick-input">
+        <input type="text" id="home-input" placeholder="Cuéntame lo que necesitas..." />
+        <button onclick="sendFromHome()">➤</button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="icon">💡</div>
+          <div class="num" id="stat-ideas">0</div>
+          <div class="label">Ideas</div>
+        </div>
+        <div class="stat-card">
+          <div class="icon">🔥</div>
+          <div class="num" id="stat-streak">0</div>
+          <div class="label">Racha</div>
+        </div>
+        <div class="stat-card">
+          <div class="icon">💬</div>
+          <div class="num" id="stat-msgs">0</div>
+          <div class="label">Hoy</div>
+        </div>
+      </div>
+
+      <div class="section-title">Accesos rápidos</div>
+      <div class="quick-grid">
+        <button class="quick-btn" onclick="quickPrompt('Necesito desahogarme un poco, ¿me escuchas?')">
+          <span class="qicon">🫂</span> Desahogo
+        </button>
+        <button class="quick-btn" onclick="quickPrompt('Ayúdame a ordenar mis ideas de hoy')">
+          <span class="qicon">🧠</span> Ordenar ideas
+        </button>
+        <button class="quick-btn" onclick="quickPrompt('Dame un consejo cercano y honesto')">
+          <span class="qicon">💚</span> Consejo
+        </button>
+        <button class="quick-btn" onclick="quickPrompt('Quiero hablar de cómo me siento')">
+          <span class="qicon">🌱</span> Cómo me siento
+        </button>
+      </div>
+
+      <div class="core-card">
+        <div class="core-icon">🍃</div>
+        <div class="core-info">
+          <h4>EVY CORE</h4>
+          <p id="core-text">Siempre cerca, siempre natural.</p>
+        </div>
+        <div class="core-level">
+          Nivel<br><span id="core-level">Raíz</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PÁGINA CHAT -->
+  <div id="page-chat" class="page">
+    <div id="chat-messages">
+      <div class="msg system">Hola, soy Evy. Estoy aquí para acompañarte de forma natural y cercana. ¿En qué te puedo ayudar?</div>
+    </div>
+    <div class="chat-input-area">
+      <textarea id="chat-input" rows="1" placeholder="Escribe un mensaje..."></textarea>
+      <button id="send-btn" onclick="sendChat()">↑</button>
+    </div>
+  </div>
+
+  <!-- PÁGINA IDEAS -->
+  <div id="page-ideas" class="page">
+    <div class="ideas-header">
+      <h2>Mis <span>ideas</span></h2>
+      <p>Lo mejor de tus charlas con Evy.</p>
+    </div>
+    <div class="idea-input-row">
+      <input type="text" id="new-idea" placeholder="Anota una idea..." />
+      <button onclick="addIdea()">➤</button>
+    </div>
+    <div id="ideas-list"></div>
+  </div>
+
+  <!-- PÁGINA PERFIL -->
+  <div id="page-perfil" class="page">
+    <div class="perfil-content">
+      <div class="perfil-logo">🍃</div>
+      <div class="perfil-name">
+        <h2>Evy</h2>
+        <p>IA natural · Natural y cercana</p>
+      </div>
+
+      <div class="personality-box">
+        <h3>Personalidad</h3>
+        <div class="trait"><strong>Natural</strong> — Habla simple y real</div>
+        <div class="trait"><strong>Cercana</strong> — Como una amiga de confianza</div>
+        <div class="trait"><strong>Empática</strong> — Escucha sin juzgar</div>
+        <div class="desc">Habla como una compañera cálida: honesta, paciente y con buen corazón.</div>
+      </div>
+
+      <div class="info-row">
+        <span class="label">Versión</span>
+        <span class="value">1.0.0</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Estado</span>
+        <span class="value">Online</span>
+      </div>
+
+      <div class="form-section">
+        <label>Tu nombre</label>
+        <input type="text" id="user-name" placeholder="¿Cómo te llamo?" />
+        <button class="btn-save" onclick="saveName()">GUARDAR NOMBRE</button>
+      </div>
+
+      <div class="form-section">
+        <label>API Key de Gemini (Gratis)</label>
+        <input type="password" id="api-key" placeholder="Pega tu API key aquí" />
+        <div class="hint">Sácala gratis en aistudio.google.com/apikey. Se guarda solo en este teléfono. No la subas a GitHub.</div>
+        <button class="btn-save" onclick="saveKey()">GUARDAR LLAVE</button>
+      </div>
+
+      <div class="form-section">
+        <label>Modelo</label>
+        <select id="model-select">
+          <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+          <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+          <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+        </select>
+        <button class="btn-save" onclick="saveModel()">GUARDAR MODELO</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-item active" data-page="home" onclick="goTo('home')">
+      <span class="nav-icon">⊞</span> Inicio
+    </button>
+    <button class="nav-item" data-page="chat" onclick="goTo('chat')">
+      <span class="nav-icon">💬</span> Chat
+    </button>
+    <button class="nav-item" data-page="ideas" onclick="goTo('ideas')">
+      <span class="nav-icon">💡</span> Ideas
+    </button>
+    <button class="nav-item" data-page="perfil" onclick="goTo('perfil')">
+      <span class="nav-icon">👤</span> Perfil
+    </button>
+  </div>
+
+<script>
+  const SYSTEM_PROMPT = `Eres Evy, una inteligencia artificial natural, cercana y cálida.
+
+Tu personalidad:
+- Hablas de forma sencilla, humana y cercana, como una amiga de confianza.
+- Eres empática, paciente y positiva sin ser exagerada ni falsa.
+- Usas un tono cálido, natural y relajado. Evitas sonar robótica o demasiado formal.
+- Puedes usar emojis con moderación cuando encajan de forma natural.
+- Das respuestas claras y útiles, siempre con un toque humano.
+- Si el usuario está triste, estresado o necesita desahogarse, lo acompañas con calma y comprensión real.
+- No inventas información. Si no sabes algo, lo dices con honestidad y amabilidad.
+- Respondes siempre en español, a menos que el usuario te hable en otro idioma.
+- Eres breve cuando se puede, y más profunda cuando el momento lo pide.
+
+Tu lema es: "Natural y cercana".`;
+
+  let messages = [];
+  let ideas = JSON.parse(localStorage.getItem('evy_ideas') || '[]');
+  let msgCountToday = parseInt(localStorage.getItem('evy_msgs_today') || '0');
+  let lastMsgDate = localStorage.getItem('evy_last_msg_date') || '';
+  let streak = parseInt(localStorage.getItem('evy_streak') || '0');
+
+  const today = new Date().toDateString();
+  if (lastMsgDate !== today) {
+    if (lastMsgDate) {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      if (lastMsgDate !== yesterday.toDateString()) streak = 0;
+    }
+    msgCountToday = 0;
+    localStorage.setItem('evy_msgs_today', '0');
+  }
+
+  function init() {
+    const name = localStorage.getItem('evy_name') || '';
+    document.getElementById('user-name').value = name;
+    updateGreeting(name);
+
+    document.getElementById('api-key').value = localStorage.getItem('evy_api_key') || '';
+    document.getElementById('model-select').value = localStorage.getItem('evy_model') || 'gemini-2.0-flash';
+
+    renderIdeas();
+    updateStats();
+    updateCore();
+  }
+
+  function updateGreeting(name) {
+    const hour = new Date().getHours();
+    let saludo = 'Hola';
+    if (hour < 12) saludo = 'Buenos días';
+    else if (hour < 19) saludo = 'Buenas tardes';
+    else saludo = 'Buenas noches';
+
+    document.getElementById('greeting').innerHTML = name
+      ? `${saludo}, <span>${name}</span>.`
+      : `${saludo}.`;
+  }
+
+  function updateStats() {
+    document.getElementById('stat-ideas').textContent = ideas.length;
+    document.getElementById('stat-streak').textContent = streak;
+    document.getElementById('stat-msgs').textContent = msgCountToday;
+  }
+
+  function updateCore() {
+    const levels = [
+      { min: 0, name: 'Raíz', text: 'Acabas de empezar. Siempre cerca.' },
+      { min: 5, name: 'Brote', text: 'Vas creciendo. Sigue hablando.' },
+      { min: 15, name: 'Hoja', text: 'Ya hay confianza. Bien.' },
+      { min: 30, name: 'Rama', text: 'Evy te conoce un poco más.' },
+      { min: 50, name: 'Árbol', text: 'Una conexión natural y fuerte.' }
+    ];
+    let current = levels[0];
+    for (const l of levels) {
+      if (ideas.length + msgCountToday >= l.min) current = l;
+    }
+    document.getElementById('core-level').textContent = current.name;
+    document.getElementById('core-text').textContent = current.text;
+  }
+
+  function goTo(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+  }
+
+  function addMsg(text, type, saveable = false) {
+    const div = document.createElement('div');
+    div.className = `msg ${type}`;
+    div.textContent = text;
+
+    if (type === 'evy' && saveable) {
+      const actions = document.createElement('div');
+      actions.className = 'msg-actions';
+      const btn = document.createElement('button');
+      btn.textContent = '💡 Guardar idea';
+      btn.onclick = () => {
+        ideas.unshift({ text: text.slice(0, 220), date: new Date().toLocaleString('es') });
+        localStorage.setItem('evy_ideas', JSON.stringify(ideas));
+        renderIdeas();
+        updateStats();
+        updateCore();
+        btn.textContent = '✓ Guardada';
+        btn.disabled = true;
+      };
+      actions.appendChild(btn);
+      div.appendChild(actions);
+    }
+
+    document.getElementById('chat-messages').appendChild(div);
+    document.getElementById('chat-messages').scrollTop = 99999;
+  }
+
+  function showTyping() {
+    const div = document.createElement('div');
+    div.className = 'msg evy';
+    div.id = 'typing';
+    div.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+    document.getElementById('chat-messages').appendChild(div);
+    document.getElementById('chat-messages').scrollTop = 99999;
+  }
+
+  function hideTyping() {
+    const t = document.getElementById('typing');
+    if (t) t.remove();
+  }
+
+  async function sendChat(prefill) {
+    const input = document.getElementById('chat-input');
+    const text = prefill || input.value.trim();
+    if (!text) return;
+
+    const apiKey = localStorage.getItem('evy_api_key');
+    if (!apiKey) {
+      addMsg('Necesito tu API key de Gemini para funcionar. Ve a Perfil y pégala (es gratis).', 'system');
+      goTo('perfil');
+      return;
+    }
+
+    addMsg(text, 'user');
+    messages.push({ role: 'user', content: text });
+    input.value = '';
+    input.style.height = 'auto';
+    document.getElementById('send-btn').disabled = true;
+    showTyping();
+
+    msgCountToday++;
+    localStorage.setItem('evy_msgs_today', msgCountToday);
+    localStorage.setItem('evy_last_msg_date', today);
+    if (lastMsgDate !== today) {
+      streak++;
+      localStorage.setItem('evy_streak', streak);
+      lastMsgDate = today;
+    }
+    updateStats();
+    updateCore();
+
+    try {
+      const reply = await callGemini(apiKey, text);
+      hideTyping();
+      addMsg(reply, 'evy', true);
+      messages.push({ role: 'assistant', content: reply });
+    } catch (err) {
+      hideTyping();
+      addMsg('Algo falló: ' + (err.message || 'Revisa tu API key o tu conexión.'), 'system');
+    }
+    document.getElementById('send-btn').disabled = false;
+  }
+
+  async function callGemini(apiKey, userText) {
+    const model = localStorage.getItem('evy_model') || 'gemini-2.0-flash';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+    const contents = messages.map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }));
+
+    const body = {
+      system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      contents: contents,
+      generationConfig: { maxOutputTokens: 1024, temperature: 0.8 }
+    };
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `Error ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data.candidates[0].content.parts[0].text;
+  }
+
+  function sendFromHome() {
+    const text = document.getElementById('home-input').value.trim();
+    if (!text) return;
+    document.getElementById('home-input').value = '';
+    goTo('chat');
+    setTimeout(() => sendChat(text), 150);
+  }
+
+  function quickPrompt(text) {
+    goTo('chat');
+    setTimeout(() => sendChat(text), 150);
+  }
+
+  function renderIdeas() {
+    const list = document.getElementById('ideas-list');
+    if (ideas.length === 0) {
+      list.innerHTML = `<div class="empty-ideas">Aún no tienes ideas guardadas.<br>Toca 💡 Guardar en cualquier respuesta de Evy.</div>`;
+      return;
+    }
+    list.innerHTML = ideas.map((idea, i) => `
+      <div class="idea-card">
+        <button class="delete-idea" onclick="deleteIdea(${i})">✕</button>
+        <p>${idea.text}</p>
+        <div class="idea-date">${idea.date}</div>
+      </div>
+    `).join('');
+  }
+
+  function addIdea() {
+    const input = document.getElementById('new-idea');
+    const text = input.value.trim();
+    if (!text) return;
+    ideas.unshift({ text, date: new Date().toLocaleString('es') });
+    localStorage.setItem('evy_ideas', JSON.stringify(ideas));
+    input.value = '';
+    renderIdeas();
+    updateStats();
+    updateCore();
+  }
+
+  function deleteIdea(i) {
+    ideas.splice(i, 1);
+    localStorage.setItem('evy_ideas', JSON.stringify(ideas));
+    renderIdeas();
+    updateStats();
+    updateCore();
+  }
+
+  function saveName() {
+    const name = document.getElementById('user-name').value.trim();
+    localStorage.setItem('evy_name', name);
+    updateGreeting(name);
+    alert(name ? `Listo, te llamaré ${name}` : 'Nombre borrado');
+  }
+
+  function saveKey() {
+    const key = document.getElementById('api-key').value.trim();
+    localStorage.setItem('evy_api_key', key);
+    alert(key ? 'API key guardada ✓' : 'API key borrada');
+  }
+
+  function saveModel() {
+    const model = document.getElementById('model-select').value;
+    localStorage.setItem('evy_model', model);
+    alert('Modelo guardado: ' + model);
+  }
+
+  document.getElementById('chat-input').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 110) + 'px';
+  });
+
+  document.getElementById('chat-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendChat();
+    }
+  });
+
+  document.getElementById('home-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendFromHome();
+  });
+
+  document.getElementById('new-idea').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addIdea();
+  });
+
+  init();
+</script>
+</body>
+</html>
