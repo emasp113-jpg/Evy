@@ -1,0 +1,16 @@
+{
+  "name": "evy-app",
+  "version": "1.0.0",
+  "description": "Evy - IA Natural y Cercana",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Listo para Capacitor'"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/cli": "^6.0.0"
+  },
+  "author": "Evy",
+  "license": "MIT"
+}
